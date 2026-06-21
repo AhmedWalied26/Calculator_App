@@ -13,11 +13,11 @@ class ButtonItem extends StatelessWidget {
   ButtonItem({
     super.key,
     required this.onClick,
-    required this.height,
-    required this.width,
+    this.height = 78,
+    this.width = 80,
     required this.label,
     required this.color,
-    required this.isIcon,
+    this.isIcon = false,
     required this.textColor,
   });
 
