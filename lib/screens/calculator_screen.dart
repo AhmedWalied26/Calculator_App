@@ -56,9 +56,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                           ),
                           ButtonItem(
                             onClick: (label) {
-                              int number = int.parse(resultData);
-                              number ~/= 10;
-                              resultData = number.toString();
+                              // int number = int.parse(resultData);
+                              // number ~/= 10;
+                              // resultData = number.toString();
+                              if (resultData.isNotEmpty) {
+                                resultData = resultData.substring(
+                                  0,
+                                  resultData.length - 1,
+                                );
+                              }
                               setState(() {});
                             },
                             height: 80,
