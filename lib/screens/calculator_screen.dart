@@ -43,10 +43,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       Row(
                         children: [
                           ButtonItem(
-                            onClick: (label) {
-                              resultData = '';
-                              setState(() {});
-                            },
+                            onClick: onClearClick,
                             height: 80,
                             width: 80,
                             color: Color(0xff616161),
@@ -54,18 +51,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                             textColor: Colors.white,
                           ),
                           ButtonItem(
-                            onClick: (label) {
-                              // int number = int.parse(resultData);
-                              // number ~/= 10;
-                              // resultData = number.toString();
-                              if (resultData.isNotEmpty) {
-                                resultData = resultData.substring(
-                                  0,
-                                  resultData.length - 1,
-                                );
-                              }
-                              setState(() {});
-                            },
+                            onClick: onRemoveClick,
                             height: 80,
                             width: 80,
                             label: '',
@@ -215,32 +201,27 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   String rhs = '';
   String operator = '';
 
-  void onEqualClick(String label) {
-    rhs = resultData;
-    lhs = calculate(lhs, rhs, operator);
-    operator = label;
-    resultData = lhs;
-
-    lhs = '';
-    rhs = '';
+  void onRemoveClick(String label) {
+    if (resultData.isEmpty) {
+      return;
+    }
+    resultData = resultData.substring(0, resultData.length - 1);
     setState(() {});
   }
 
-  String calculate(String lhs, String rhs, String operator) {
-    double LHS = double.parse(lhs);
-    double RHS = double.parse(rhs);
+  void onClearClick(String label) {
+    lhs = '';
+    operator = '';
+    resultData = '';
+    setState(() {});
+  }
 
-    if (operator == '+') {
-      return (LHS + RHS).toString();
-    } else if (operator == '-') {
-      return (LHS - RHS).toString();
-    } else if (operator == '*') {
-      return (LHS * RHS).toString();
-    } else if (operator == '/') {
-      return (LHS / RHS).toString();
-    } else {
-      return '0';
-    }
+  void onEqualClick(String label) {
+    rhs = resultData;
+    resultData = calculate(lhs, rhs, operator);
+    lhs = '';
+    operator = '';
+    setState(() {});
   }
 
   void onOperatorClick(String label) {
@@ -255,10 +236,26 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     setState(() {});
   }
 
+  String calculate(String lhs, String rhs, String operator) {
+    double num1 = double.parse(lhs);
+    double num2 = double.parse(rhs);
+    double res = 0.0;
+
+    if (operator == '+') {
+      res = num1 + num2;
+    } else if (operator == '-') {
+      res = num1 - num2;
+    } else if (operator == '*') {
+      res = num1 * num2;
+    } else if (operator == '/') {
+      res = num1 / num2;
+    }
+    return res.toString();
+  }
+
   void onDigitClick(String label) {
-    if (operator == '=') {
-      resultData = '';
-      operator = '';
+    if (label == '.' && resultData.contains('.')) {
+      return;
     }
     resultData += label;
     setState(() {});
